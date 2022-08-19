@@ -1,3 +1,4 @@
+-- Marco Antônio Barbosa Zulian
 -- 1. Escreva uma função chamada soma1 que recebe um inteiro como argumento e retorna um inteiro uma unidade maior que a entrada.  
 soma1 :: Int -> Int
 soma1 n = n + 1
