@@ -1,99 +1,123 @@
--- Marco Antônio Barbosa Zulian
--- 1. Escreva uma função chamada soma1 que recebe um inteiro como argumento e retorna um inteiro uma unidade maior que a entrada.  
-soma1 :: Int -> Int
-soma1 n = n + 1
+-- Marco Antonio Barbosa Zulian
+{-- 1. Escreva  uma  função  para  o  cálculo  dos  números  da  sequência  de  Fibonacci,  utilizando Haskell.  --} 
+fibonacci :: Int -> Int
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci (n-1) + fibonacci (n-2)
+seqFibonacci :: Int -> [Int]
+seqFibonacci 0 = []
+seqFibonacci n = [fibonacci x | x <- [1..n]]
 
--- 2. Escreva uma função chamada sempre que, não importando o valor de entrada, devolva sempre zero. Observe que neste caso a entrada pode ser de qualquer tipo.
-sempre :: a -> Int
-sempre x = 0
+{-- 2. Um dos primeiros algoritmos documentados é o algoritmo para o cálculo do Maior 
+Divisor Comum  (MDC)  de  Euclides  publicado  por  volta do  ano 300  AC.  Podemos 
+simplificar  este algoritmo  dizendo  que  dados  dois  inteiros  A  e  B,  o  MDC  
+entre  eles  será dado  pelo  valor absoluto de A se B=0 e pelo MDC entre B e o resto 
+da divisão de A por B se B>0. Escreva uma  função  para  o  cálculo  do  MDC  entre  
+dois  números  inteiros  positivos,  usando  o algoritmo de Euclides conforme 
+apresentado aqui, utilizando Haskell. --}
+mdc :: Int -> Int -> Int
+mdc a 0 = a
+mdc a b = mdc b (a `mod` b)
 
--- 3. Escreva  uma  função  chamada  treco  que  receba  três  valores  em  ponto  flutuantes  com precisão dupla e retorne o resultado da soma dos dois primeiros multiplicado pelo terceiro.
-treco :: Double -> Double -> Double -> Double
-treco x y z = (x + y) * z
+{-- 3. Escreva uma função recursiva que dado um número inteiro n, devolva a soma dos 
+dígitos deste  número.  Exemplo:  dado  1234  a  função  deverá  devolver  10.  
+Utilizando  Haskell  e recursividade. --}
+somaDigitos :: Int -> Int
+somaDigitos x
+  | x < 10 && x >= 0 = x
+  | x < 0 = -somaDigitos(-x)
+  | otherwise = x `mod` 10 + somaDigitos (x `quot` 10)
 
--- 4. Escreva uma função chamada resto que devolva o resto de uma divisão entre dois números inteiros. 
-resto :: Int -> Int -> Int
-resto n m = n `mod` m
+{-- 4. Escreva  uma  função  que  devolva  a  soma  de  todos  os  números  menores  
+que  10000  que sejam múltiplos de 3 ou 5. --}
+multiplos35 = [x | x <- [1..10000], x `mod` 3 == 0 || x `mod` 5 == 0]
 
--- 5. Escreva uma função chamada precoMaior que devolva o maior valor entre quatro valores monetários.
-precoMaior :: Float -> Float -> Float -> Float -> Float
-precoMaior a b c d 
-  | a >= b && a >= c && a >= d = a
-  | b >= a && b >= c && b >= d = b
-  | c >= a && c >= b && c >= d = c
-  | otherwise = d
+{-- 5. Escreva  uma  função que,  recebendo  uma  lista  de  inteiros,  apresente  a  
+diferença  entre a soma dos quadrados e o quadrado da soma destes inteiros, usando 
+recursividade. --}
+somaLista :: [Int] -> Int
+somaLista [] = 0
+somaLista (x: xs) = x + somaLista xs
 
--- 6. Escreva uma função chamada impar que devolva True, sempre que o resultado do produto de dois números inteiros for ímpar.  
-impar :: Int -> Int -> Bool
-impar x y = (x * y) `mod` 2 == 1
+quadradoLista :: [Int] -> [Int]
+quadradoLista xs = [x^2 | x<-xs] 
 
--- 7. Em Haskell existe o tipo par cuja assinatura tem a seguinte forma: 𝑝𝑎𝑟∷(𝐼𝑛𝑡,𝐼𝑛𝑡). Escreva uma função em Haskell que devolva a soma dos componentes de um par de inteiros.
-somaPar :: (Int,Int) -> Int
-somaPar (x, y) = x + y
+diferencaSomaQuadQuadSoma :: [Int] -> Int
+diferencaSomaQuadQuadSoma x =
+  let
+    somaQuad = somaLista (quadradoLista x)
+    quadSoma = (somaLista x)^2
+  in somaQuad - quadSoma
 
--- 8. Escreva uma função em Haskell que receba números reais (double) e devolva o resultado da equação 𝑥^2 +𝑦/2 + 𝑧. 
-equacao :: Double -> Double -> Double -> Double
-equacao x y z = x**2 + y / 2 + z
+{--6. O Crivo de Eratóstenes não é o melhor algoritmo para encontrar números primos. 
+Crie uma função que implemente o Crivo de Euler (Euler’s Sieve) para encontrar todos 
+os números primos menores que um determinado inteiro dado.  --}
+passoCrivo :: Int -> [Int] -> [Int]
+passoCrivo limite [] = []
+passoCrivo limite lista
+  | head lista > limite = lista
+  | otherwise = [head lista] ++ passoCrivo limite ([x | x <- tail lista, x `mod` (head lista) /= 0])
 
--- 9. Escreva uma função em Haskell chamada diagnostico que receba o peso do aluno e imprima um  diagnóstico  de  obesidade,  segundo  a  tabela  que  pode  ser  encontrada  no  link: Sobrepeso,  obesidade  e  obesidade  mórbida:  entenda  a  diferença  entre  os  três  termos (cuidadospelavida.com.br).  Observe  que  este  diagnóstico  é  meramente  estatístico  e  não tem nenhum valor real, está sendo usado nesta questão apenas para a definição das faixas. Todo e qualquer diagnóstico deve ser feito por um profissional médico.
-diagnostico :: Float -> Float -> String
-diagnostico x y
-  | x / (y * y) < 17 = "Muito abaixo do peso"
-  | x / (y * y) < 18.49 = "Abaixo do peso"
-  | x / (y * y) < 24.99 = "Peso normal"
-  | x / (y * y) < 29.99 = "Sobrepeso"
-  | x / (y * y) < 34.99 = "Obesidade leve"
-  | x / (y * y) < 39.99 = "Obesidade severa"
-  | otherwise = "Obesidade morbida"
+crivo :: Int -> [Int]
+crivo x = passoCrivo x [2..x]
 
--- 10. Escreva uma função em Haskell chamada bissexto que receba um ano e devolva True se o ano for bisexto sabendo que anos bissextos obedecem a seguinte regra:  
--- 𝑇𝑜𝑑𝑜𝑠 𝑜𝑠 𝑎𝑛𝑜𝑠 𝑞𝑢𝑒 𝑠𝑒𝑗𝑎𝑚 𝑑𝑖𝑣𝑖𝑠í𝑣𝑒𝑖𝑠 𝑝𝑜𝑟 4 
---      𝐸𝑥𝑐𝑒𝑡𝑜 𝑜𝑠 𝑎𝑛𝑜𝑠 𝑞𝑢𝑒 𝑠ã𝑜 𝑚ú𝑙𝑡𝑖𝑝𝑙𝑜𝑠 𝑑𝑒 100 
---            𝐸𝑥𝑐𝑒𝑡𝑜 𝑜𝑠 𝑎𝑛𝑜𝑠 𝑞𝑢𝑒 𝑠ã𝑜 𝑚ú𝑙𝑡𝑖𝑝𝑙𝑜𝑠 𝑑𝑒 400 
--- 1997 não é bissexto, 1900 não é bissexto e 2000 é bissexto.
-bissexto :: Int -> Bool
-bissexto x
-  | x `mod` 400 == 0 = True
-  | x `mod` 100 == 0 = False
-  | x `mod` 4 == 0 = True
-  | otherwise = False
+{--7. Nem  só  de  Fibonacci  vivem  os  exemplos  de  recursão.  Escreva  uma  
+função  que  devolva todos os números de uma sequência de Lucas (2, 1, 3, 4, 7, 11, 
+18, 29, 47, 76, 123) menores que um inteiro dado. --} 
+menoresQueXLucas :: Int -> Int -> Int -> [Int] -> [Int]
+menoresQueXLucas penultimo ultimo limite elementos
+  | limite > ultimo + penultimo = menoresQueXLucas ultimo (penultimo + ultimo) limite (elementos ++ [ultimo + penultimo])
+  | otherwise = elementos
+
+lucas :: Int -> [Int]
+lucas 1 = [1]
+lucas 2 = [2]
+lucas x = if x < 1 then [] else menoresQueXLucas 2 1 x [2, 1]
+
+{--8. Escreva uma função, chamada aoContrario em Haskel para reverter uma lista. Dado 
+[1,2,3] devolva [3,2,1]. --}
+-- CASO BASE NÃO FUNCIONA
+-- ARRAY DE CHAR
+aoContrario :: [a] -> [a]
+aoContrario [] = []
+aoContrario x = [last x] ++ aoContrario (init x)
+
+{--9. Escreva uma função chamada somaRecursiva que recebe dois valores inteiros e 
+devolve o produto destes valores sem usar o operador de multiplicação. --}
+somaRecursiva :: Int -> Int -> Int
+somaRecursiva x 0 = 0
+somaRecursiva x y = if y < 0 then -1 * (x + somaRecursiva x (-y-1)) else (x + somaRecursiva x (y-1))
+
+{--10. Escreva uma função chamada comprimento que receba uma lista de  inteiros 
+devolva o comprimento desta lista. Observe que você não pode usar nenhuma função que
+já calcule o comprimento de uma lista. --}
+comprimento :: [Int] -> Int
+comprimento [] = 0
+comprimento (x:xs) = 1 + comprimento xs
 
 main = do
-
-  putStrLn ("Func. 1: entrada: 2; resultado: " ++ show(soma1 2))
-  putStrLn ("Func. 1: entrada: -1; resultado: " ++ show(soma1 (-1)))
-  putStrLn ("Func. 2: entrada: 'a'; resultado: " ++ show(sempre 'a'))
-  putStrLn ("Func. 2: entrada: 1.3; resultado: " ++ show(sempre 1.3))
-  putStrLn ("Func. 2: entrada: -4; resultado: " ++ show(sempre (-4)))
-  putStrLn ("Func. 3: entrada: 1 2 3; resultado: " ++ show(treco 1 2 3))
-  putStrLn ("Func. 3: entrada: -5 2 1; resultado: " ++ show(treco (-5) 2 1))
-  putStrLn ("Func. 3: entrada: -5 -2 -3; resultado: " ++ show(treco (-5) (-2) (-3)))
-  putStrLn ("Func. 4: entrada: 25 2; resultado: " ++ show(resto 25 2))
-  putStrLn ("Func. 4: entrada: -4 2; resultado: " ++ show(resto (-4) 2))
-  putStrLn ("Func. 4: entrada: -5 2; resultado: " ++ show(resto (-5) 2))
-  putStrLn ("Func. 5: entrada: 10 9 -8 -3; resultado: " ++ show(precoMaior 10 9 (-8) (-3)))
-  putStrLn ("Func. 5: entrada: 3 9 -8 -3; resultado: " ++ show(precoMaior 3 9 (-8) (-3)))
-  putStrLn ("Func. 5: entrada: -10 -9 -8 -11; resultado: " ++ show(precoMaior (-10) (-9) (-8) (-11)))
-  putStrLn ("Func. 5: entrada: 10 9 -8 25; resultado: " ++ show(precoMaior 10 9 (-8) 25))
-  putStrLn ("Func. 6: entrada: 1 2; resultado: " ++ show(impar 1 2))
-  putStrLn ("Func. 6: entrada: 4 2; resultado: " ++ show(impar 4 2))
-  putStrLn ("Func. 6: entrada: 5 3; resultado: " ++ show(impar 5 3))
-  putStrLn ("Func. 6: entrada: -1 2; resultado: " ++ show(impar (-1) 2))
-  putStrLn ("Func. 6: entrada: -4 -2; resultado: " ++ show(impar (-4) (-2)))
-  putStrLn ("Func. 6: entrada: 5 -3; resultado: " ++ show(impar 5 (-3)))
-  putStrLn ("Func. 7: entrada: (10 20); resultado: " ++ show(somaPar (10, 20)))
-  putStrLn ("Func. 7: entrada: (-10 3); resultado: " ++ show(somaPar ((-10), 3)))
-  putStrLn ("Func. 7: entrada: (-10 -3); resultado: " ++ show(somaPar ((-10), (-3))))
-  putStrLn ("Func. 8: entrada: -10 20 -110; resultado: " ++ show(equacao (-10) 20 (-110)))
-  putStrLn ("Func. 8: entrada: 5 -17 30; resultado: " ++ show(equacao 5 (-17) 30))
-  putStrLn ("Func. 9: entrada: 20.5 1.3; resultado: " ++ show(diagnostico 20.5 1.3))
-  putStrLn ("Func. 9: entrada: 40 1.5; resultado: " ++ show(diagnostico 40 1.5))
-  putStrLn ("Func. 9: entrada: 90 1.9; resultado: " ++ show(diagnostico 90 1.9))
-  putStrLn ("Func. 9: entrada: 100 1.9; resultado: " ++ show(diagnostico 100 1.9)) 
-  putStrLn ("Func. 9: entrada: 110 1.9; resultado: " ++ show(diagnostico 110 1.9))
-  putStrLn ("Func. 9: entrada: 110 1.7; resultado: " ++ show(diagnostico 110 1.7))
-  putStrLn ("Func. 9: entrada: 110 1.3; resultado: " ++ show(diagnostico 110 1.3))
-  putStrLn ("Func. 10: entrada: 2000; resultado: " ++ show(bissexto 2000))
-  putStrLn ("Func. 10: entrada: 1800; resultado: " ++ show(bissexto 1800))
-  putStrLn ("Func. 10: entrada: 1996; resultado: " ++ show(bissexto 1996))
-  putStrLn ("Func. 10: entrada: 1997; resultado: " ++ show(bissexto 1997))
+  putStrLn ("Func. 1: entrada: 0; resultado: " ++ show(seqFibonacci 0))
+  putStrLn ("Func. 1: entrada: 5; resultado: " ++ show(seqFibonacci 5))
+  putStrLn ("Func. 2: entrada: 23732 180; resultado: " ++ show(mdc 23732 180))
+  putStrLn ("Func. 3: entrada: 1234; resultado: " ++ show(somaDigitos 1234))
+  putStrLn ("Func. 3: entrada: 0; resultado: " ++ show(somaDigitos 0))
+  putStrLn ("Func. 3: entrada: -3579; resultado: " ++ show(somaDigitos (-3579)))
+  -- putStrLn ("Func. 4: entrada: ; resultado: " ++ show(-5 `mod` 10))
+  putStrLn ("Func. 5: entrada: [1,2,-3]; resultado: " ++ show(diferencaSomaQuadQuadSoma [1,2,(-3)]))
+  putStrLn ("Func. 5: entrada: [1,2,3]; resultado: " ++ show(diferencaSomaQuadQuadSoma [1,2,3]))
+  putStrLn ("Func. 6: entrada: -20; resultado: " ++ show(crivo (-20)))
+  putStrLn ("Func. 6: entrada: 0; resultado: " ++ show(crivo (0)))
+  putStrLn ("Func. 6: entrada: 20; resultado: " ++ show(crivo (20)))
+  putStrLn ("Func. 7: entrada: -5; resultado: " ++ show(lucas (-5)))
+  putStrLn ("Func. 7: entrada: 1; resultado: " ++ show(lucas 1))
+  putStrLn ("Func. 7: entrada: 2; resultado: " ++ show(lucas 2))
+  putStrLn ("Func. 7: entrada: 11; resultado: " ++ show(lucas 11))
+  putStrLn ("Func. 8: entrada: [1.3,-2.5,3]; resultado: " ++ show(aoContrario [1.3,(-2.5),3]))
+  putStrLn ("Func. 8: entrada: [1,2,3]; resultado: " ++ show(aoContrario [1,2,3]))
+  putStrLn ("Func. 8: entrada: [a,b,c]; resultado: " ++ show(aoContrario ['a','b','c']))
+  putStrLn ("Func. 9: entrada: 2 0; resultado: " ++ show(somaRecursiva 2 0))
+  putStrLn ("Func. 9: entrada: 5 3; resultado: " ++ show(somaRecursiva 5 3))
+  putStrLn ("Func. 9: entrada: 4 -2; resultado: " ++ show(somaRecursiva 4 (-2)))
+  putStrLn ("Func. 10: entrada: []; resultado: " ++ show(comprimento []))
+  putStrLn ("Func. 10: entrada: [1]; resultado: " ++ show(comprimento [1]))
+  putStrLn ("Func. 10: entrada: [1,2,3]; resultado: " ++ show(comprimento [1,2,3]))
