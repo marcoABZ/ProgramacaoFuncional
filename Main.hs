@@ -102,7 +102,7 @@ main = do
   putStrLn ("Func. 3: entrada: 1234; resultado: " ++ show(somaDigitos 1234))
   putStrLn ("Func. 3: entrada: 0; resultado: " ++ show(somaDigitos 0))
   putStrLn ("Func. 3: entrada: -3579; resultado: " ++ show(somaDigitos (-3579)))
-  -- putStrLn ("Func. 4: entrada: ; resultado: " ++ show(-5 `mod` 10))
+  putStrLn ("Teste func 4 ao fim do arquivo, por conta do tamanho do output.")
   putStrLn ("Func. 5: entrada: [1,2,-3]; resultado: " ++ show(diferencaSomaQuadQuadSoma [1,2,(-3)]))
   putStrLn ("Func. 5: entrada: [1,2,3]; resultado: " ++ show(diferencaSomaQuadQuadSoma [1,2,3]))
   putStrLn ("Func. 6: entrada: -20; resultado: " ++ show(crivo (-20)))
@@ -121,3 +121,5 @@ main = do
   putStrLn ("Func. 10: entrada: []; resultado: " ++ show(comprimento []))
   putStrLn ("Func. 10: entrada: [1]; resultado: " ++ show(comprimento [1]))
   putStrLn ("Func. 10: entrada: [1,2,3]; resultado: " ++ show(comprimento [1,2,3]))
+
+  putStrLn ("Func. 4: entrada: ; resultado: " ++ show(multiplos35))
